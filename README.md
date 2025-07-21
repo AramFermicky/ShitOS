@@ -1,0 +1,2 @@
+# ShitOS
+Game creating
