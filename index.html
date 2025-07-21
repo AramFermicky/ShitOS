@@ -2,67 +2,53 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>ShitOS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>💩 ShitOS</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="js/main.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to right, #101820, #1a2a33);
-      color: #f0f0f0;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 2.2rem;
-      color: #00ffee;
-    }
-    .menu-button {
-      display: block;
-      margin: 10px auto;
-      padding: 10px 20px;
-      font-size: 1.1rem;
-      background: #00ffee;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      color: #000;
-      transition: transform 0.2s, background 0.3s;
-    }
-    .menu-button:hover {
-      background: #00c0c0;
-      transform: scale(1.05);
-    }
-    .fade-in {
-      animation: fade 0.5s ease;
-    }
-    @keyframes fade {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    #editor, #editor3d, #export, #play {
-      padding: 20px;
-    }
-    button {
-      margin: 5px;
-    }
-  </style>
 </head>
 <body>
-  <!-- Главное меню -->
-  <div id="menu" class="fade-in">
-    <h1>🎮 ShitOS</h1>
-    <button class="menu-button" data-tab="editor">🧱 Редактор 2D</button>
-    <button class="menu-button" data-tab="editor3d">🧊 Редактор 3D</button>
-    <button class="menu-button" data-tab="export">📤 Экспорт</button>
-    <button class="menu-button" data-tab="play">▶️ Играть</button>
-  </div>
+  <header>
+    <h1>💩 ShitOS</h1>
+    <nav>
+      <button class="menu-button" data-target="creator">🎮 Создатель Игры</button>
+      <button class="menu-button" data-target="editor">🧱 Редактор 2D</button>
+      <button class="menu-button" data-target="editor3d">🧊 Редактор 3D</button>
+      <button class="menu-button" data-target="exporter">📦 Экспорт</button>
+      <button class="menu-button" data-target="game">▶️ Играть</button>
+    </nav>
+  </header>
 
-  <!-- Контейнеры модулей -->
-  <div id="editor" style="display: none;"></div>
-  <div id="editor3d" style="display: none;"></div>
-  <div id="export" style="display: none;"></div>
-  <div id="play" style="display: none;"></div>
+  <main>
+    <!-- 🎮 Создатель Игры -->
+    <section id="creator" class="page" style="display: none;">
+      <h2>🎮 Создатель Игры</h2>
+      <p>Создание и управление проектами в будущем обновлении.</p>
+    </section>
+
+    <!-- 🧱 Редактор 2D -->
+    <section id="editor" class="page" data-initialized="false" style="display: none;">
+      <!-- Контент редактора 2D создаётся через editor.js -->
+    </section>
+
+    <!-- 🧊 Редактор 3D -->
+    <section id="editor3d" class="page" data-initialized="false" style="display: none;">
+      <!-- Контент редактора 3D создаётся через editor3d.js -->
+    </section>
+
+    <!-- 📦 Экспорт -->
+    <section id="exporter" class="page" style="display: none;">
+      <h2>📦 Экспорт</h2>
+      <p>Для экспорта откройте 2D или 3D редактор и используйте соответствующую кнопку.</p>
+    </section>
+
+    <!-- ▶️ Играть -->
+    <section id="game" class="page" data-initialized="false" style="display: none;">
+      <h2>▶️ Играть</h2>
+      <p>Режим запуска игры будет добавлен позже.</p>
+    </section>
+  </main>
+
+  <!-- Модули -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

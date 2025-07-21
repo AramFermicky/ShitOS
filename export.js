@@ -1,18 +1,17 @@
-function exportProject() {
-  const data = {
-    title: "ShitOS Game",
-    grid: [[0, 1], [1, 0]],
-    tiles: []
-  };
+// js/export.js
 
-  const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "project.gis";
-  a.click();
+const container = document.getElementById('export');
+if (!container.dataset.initialized) {
+  container.dataset.initialized = 'true';
+  container.innerHTML = `
+    <h2>📤 Экспорт проекта</h2>
+    <p>Выберите формат:</p>
+    <button id="exportGis">.gis</button>
+    <button id="exportPis">.pis</button>
+    <button id="exportGfm">.gfm</button>
+  `;
+
+  document.getElementById('exportGis').onclick = () => alert('Экспорт в .gis пока не реализован');
+  document.getElementById('exportPis').onclick = () => alert('Экспорт в .pis пока не реализован');
+  document.getElementById('exportGfm').onclick = () => alert('Экспорт в .gfm пока не реализован');
 }
-document.addEventListener("DOMContentLoaded", () => {
-  const exp = document.getElementById("export");
-  exp.innerHTML = `<button onclick="exportProject()">💾 Сохранить проект (.gis)</button>`;
-});

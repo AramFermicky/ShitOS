@@ -1,118 +1,114 @@
-/* style.css */
-
-/* Основной фон и шрифты */
+/* Общий стиль страницы */
 body {
   margin: 0;
-  padding: 0;
-  background: linear-gradient(145deg, #0a0f1a, #1c1f2b);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #111;
   color: #f0f0f0;
-  font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden;
 }
 
-/* Центровка интерфейса */
-#app, #editor {
-  max-width: 1200px;
-  margin: auto;
-  padding: 20px;
+/* Шапка */
+header {
+  background-color: #1e1e1e;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #333;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.4em;
+  color: #00ff88;
+}
+
+/* Меню кнопок */
+nav button {
+  margin-left: 0.5em;
+  padding: 0.6em 1em;
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, border 0.2s;
+}
+
+nav button:hover {
+  background: #333;
+  border-color: #00ff88;
+}
+
+/* Основной контент */
+main {
+  padding: 1.5em;
+}
+
+/* Страницы-вкладки */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+/* Редактор */
+#editor canvas {
+  background-color: #000;
+  border: 1px solid #333;
+  image-rendering: pixelated;
 }
 
 /* Панель инструментов */
-#editor > div {
-  margin-bottom: 10px;
+.toolbox {
+  margin-bottom: 1em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
 }
 
-/* Кнопки */
-button {
-  background: #1f2633;
-  border: 1px solid #444;
+.toolbox select,
+.toolbox input[type="file"],
+.toolbox input[type="color"],
+.toolbox button {
+  padding: 0.4em 0.6em;
+  background: #222;
+  border: 1px solid #555;
   color: #fff;
-  padding: 8px 14px;
-  margin: 4px;
-  border-radius: 8px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
 }
 
-button:hover {
-  background: #2e3444;
-  transform: scale(1.03);
-  box-shadow: 0 0 5px #00ffee33;
-}
-
-/* Поля ввода */
-input[type="number"],
-input[type="file"] {
-  background: #10141f;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-left: 5px;
-}
-
-/* Палитра тайлов */
-#editor canvas {
-  box-shadow: 0 0 12px #0008;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  background: #111;
-}
-
-#editor > div#tilePalette {
-  border: 1px solid #444;
-  padding: 10px;
-  background: #1a1d28;
-  border-radius: 8px;
-  max-height: 240px;
-  overflow-y: auto;
-  box-shadow: inset 0 0 5px #000;
-}
-
-/* Заголовки */
-h1, h2, h3 {
-  color: #00ffee;
-  font-weight: 600;
-  text-shadow: 0 0 5px #00ffee22;
-}
-
-/* Панель предменю */
-#preselect {
-  text-align: center;
-  padding: 100px 20px;
-}
-
-#preselect button {
-  font-size: 18px;
-  padding: 12px 24px;
-  margin: 10px;
-}
-
-/* Анимации */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.fade-in {
-  animation: fadeIn 0.4s ease-out;
-}
-
-/* Скроллбар */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1a1a1a;
-}
-
-::-webkit-scrollbar-thumb {
+.toolbox button:hover,
+.toolbox select:hover {
   background: #333;
-  border-radius: 5px;
+  border-color: #00ff88;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+/* Элементы UI в редакторе */
+label {
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+h2 {
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.3em;
+  color: #00ff88;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+input[type="file"] {
+  color: #fff;
+}
+
+input[type="color"] {
+  padding: 0;
+  border: none;
+  background: none;
 }
