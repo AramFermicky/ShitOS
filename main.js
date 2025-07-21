@@ -3,6 +3,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const deviceScreen = document.getElementById("deviceSelect");
   const mainUI = document.getElementById("mainInterface");
+  const selectDesktop = document.getElementById("selectDesktop");
+  const selectMobile = document.getElementById("selectMobile");
 
   const buttons = document.querySelectorAll(".menu-button");
   const pages = document.querySelectorAll(".page");
@@ -10,13 +12,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const selectedDevice = localStorage.getItem("ShitOS_device");
   if (!selectedDevice) {
     deviceScreen.style.display = "flex";
-    document.getElementById("selectDesktop").onclick = () => {
+    selectDesktop.onclick = () => {
       localStorage.setItem("ShitOS_device", "desktop");
-      startShitOS();
+      location.reload();
     };
-    document.getElementById("selectMobile").onclick = () => {
+    selectMobile.onclick = () => {
       localStorage.setItem("ShitOS_device", "mobile");
-      startShitOS();
+      location.reload();
     };
   } else {
     startShitOS();
