@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>ShitOS</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="module" src="js/main.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(to right, #101820, #1a2a33);
+      color: #f0f0f0;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 2.2rem;
+      color: #00ffee;
+    }
+    .menu-button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      background: #00ffee;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: #000;
+      transition: transform 0.2s, background 0.3s;
+    }
+    .menu-button:hover {
+      background: #00c0c0;
+      transform: scale(1.05);
+    }
+    .fade-in {
+      animation: fade 0.5s ease;
+    }
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    #editor, #editor3d, #export, #play {
+      padding: 20px;
+    }
+    button {
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Главное меню -->
+  <div id="menu" class="fade-in">
+    <h1>🎮 ShitOS</h1>
+    <button class="menu-button" data-tab="editor">🧱 Редактор 2D</button>
+    <button class="menu-button" data-tab="editor3d">🧊 Редактор 3D</button>
+    <button class="menu-button" data-tab="export">📤 Экспорт</button>
+    <button class="menu-button" data-tab="play">▶️ Играть</button>
+  </div>
+
+  <!-- Контейнеры модулей -->
+  <div id="editor" style="display: none;"></div>
+  <div id="editor3d" style="display: none;"></div>
+  <div id="export" style="display: none;"></div>
+  <div id="play" style="display: none;"></div>
+</body>
+</html>
