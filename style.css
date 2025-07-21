@@ -1,114 +1,142 @@
-/* Общий стиль страницы */
+/* Основной стиль */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background-color: #111;
   color: #f0f0f0;
 }
 
-/* Шапка */
+/* Хедер */
 header {
-  background-color: #1e1e1e;
-  padding: 1em;
+  background-color: #222;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #333;
+  flex-wrap: wrap;
+  box-shadow: 0 0 8px #000;
 }
 
 header h1 {
   margin: 0;
-  font-size: 1.4em;
-  color: #00ff88;
+  font-size: 20px;
 }
 
-/* Меню кнопок */
-nav button {
-  margin-left: 0.5em;
-  padding: 0.6em 1em;
-  background: #222;
-  border: 1px solid #444;
-  border-radius: 6px;
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.menu-button {
+  background: #444;
+  border: none;
   color: #fff;
+  padding: 8px 12px;
   cursor: pointer;
-  transition: background 0.2s, border 0.2s;
+  border-radius: 6px;
+  transition: background 0.2s;
 }
 
-nav button:hover {
-  background: #333;
-  border-color: #00ff88;
+.menu-button:hover {
+  background: #666;
 }
 
-/* Основной контент */
+/* Предменю выбора устройства */
+#deviceSelect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #111, #333);
+  gap: 20px;
+}
+
+#deviceSelect h2 {
+  font-size: 24px;
+}
+
+#deviceSelect button {
+  font-size: 20px;
+  padding: 10px 24px;
+  background: #444;
+  border: none;
+  color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#deviceSelect button:hover {
+  background: #666;
+}
+
+/* Основные страницы */
 main {
-  padding: 1.5em;
+  padding: 20px;
 }
 
-/* Страницы-вкладки */
 .page {
   display: none;
 }
 
-.page.active {
-  display: block;
-}
-
-/* Редактор */
-#editor canvas {
-  background-color: #000;
-  border: 1px solid #333;
-  image-rendering: pixelated;
-}
-
-/* Панель инструментов */
 .toolbox {
-  margin-bottom: 1em;
+  background: #222;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.toolbox select,
+.toolbox input[type="text"],
+.toolbox input[type="number"],
 .toolbox input[type="file"],
-.toolbox input[type="color"],
-.toolbox button {
-  padding: 0.4em 0.6em;
-  background: #222;
+.toolbox select {
+  padding: 6px;
+  background: #333;
   border: 1px solid #555;
   color: #fff;
-  border-radius: 4px;
+  border-radius: 6px;
+}
+
+.toolbox button {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.toolbox button:hover,
-.toolbox select:hover {
-  background: #333;
-  border-color: #00ff88;
+.toolbox button:hover {
+  background: #777;
 }
 
-/* Элементы UI в редакторе */
-label {
-  display: inline-block;
-  margin-right: 0.5em;
-}
-
-h2 {
-  border-bottom: 1px solid #444;
-  padding-bottom: 0.3em;
-  color: #00ff88;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-
-input[type="file"] {
+/* Ошибки */
+#shitErrorBox {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff3333;
   color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
 }
 
-input[type="color"] {
-  padding: 0;
-  border: none;
-  background: none;
+/* Мобильное адаптирование */
+body.device-mobile nav {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+body.device-mobile .menu-button {
+  width: 100%;
 }

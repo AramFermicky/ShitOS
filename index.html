@@ -7,48 +7,52 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>💩 ShitOS</h1>
-    <nav>
-      <button class="menu-button" data-target="creator">🎮 Создатель Игры</button>
-      <button class="menu-button" data-target="editor">🧱 Редактор 2D</button>
-      <button class="menu-button" data-target="editor3d">🧊 Редактор 3D</button>
-      <button class="menu-button" data-target="exporter">📦 Экспорт</button>
-      <button class="menu-button" data-target="game">▶️ Играть</button>
-    </nav>
-  </header>
+  <!-- Предменю выбора устройства -->
+  <div id="deviceSelect" class="device-select">
+    <h2>Выберите устройство:</h2>
+    <button id="selectDesktop">💻 ПК</button>
+    <button id="selectMobile">📱 Мобильное</button>
+  </div>
 
-  <main>
-    <!-- 🎮 Создатель Игры -->
-    <section id="creator" class="page" style="display: none;">
-      <h2>🎮 Создатель Игры</h2>
-      <p>Создание и управление проектами в будущем обновлении.</p>
-    </section>
+  <!-- Основной интерфейс -->
+  <div id="mainInterface" style="display:none;">
+    <header>
+      <h1>💩 ShitOS</h1>
+      <nav>
+        <button class="menu-button" data-target="creator">🎮 Создатель Игры</button>
+        <button class="menu-button" data-target="editor">🧱 Редактор 2D</button>
+        <button class="menu-button" data-target="editor3d">🧊 Редактор 3D</button>
+        <button class="menu-button" data-target="character">🧍 Персонаж</button>
+        <button class="menu-button" data-target="exporter">📦 Экспорт</button>
+        <button class="menu-button" data-target="game">▶️ Играть</button>
+      </nav>
+    </header>
 
-    <!-- 🧱 Редактор 2D -->
-    <section id="editor" class="page" data-initialized="false" style="display: none;">
-      <!-- Контент редактора 2D создаётся через editor.js -->
-    </section>
+    <main>
+      <!-- Менеджер проектов -->
+      <section id="creator" class="page" style="display: none;"></section>
 
-    <!-- 🧊 Редактор 3D -->
-    <section id="editor3d" class="page" data-initialized="false" style="display: none;">
-      <!-- Контент редактора 3D создаётся через editor3d.js -->
-    </section>
+      <!-- Редактор 2D -->
+      <section id="editor" class="page" data-initialized="false" style="display: none;"></section>
 
-    <!-- 📦 Экспорт -->
-    <section id="exporter" class="page" style="display: none;">
-      <h2>📦 Экспорт</h2>
-      <p>Для экспорта откройте 2D или 3D редактор и используйте соответствующую кнопку.</p>
-    </section>
+      <!-- Редактор 3D -->
+      <section id="editor3d" class="page" data-initialized="false" style="display: none;"></section>
 
-    <!-- ▶️ Играть -->
-    <section id="game" class="page" data-initialized="false" style="display: none;">
-      <h2>▶️ Играть</h2>
-      <p>Режим запуска игры будет добавлен позже.</p>
-    </section>
-  </main>
+      <!-- Редактор персонажа -->
+      <section id="character" class="page" data-initialized="false" style="display: none;"></section>
 
-  <!-- Модули -->
+      <!-- Экспорт проекта -->
+      <section id="exporter" class="page" data-initialized="false" style="display: none;"></section>
+
+      <!-- Игровой режим -->
+      <section id="game" class="page" data-initialized="false" style="display: none;"></section>
+    </main>
+  </div>
+
+  <!-- Элемент для вывода ошибок -->
+  <div id="shitErrorBox" style="display:none;"></div>
+
+  <!-- Скрипты -->
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
