@@ -1,42 +1,98 @@
-// js/editor3d.js
-
-import { showError } from "./errorMessage.js";
+// editor3d.js — расширенный 3D-редактор на THREE.js с экспортом и импортом
 
 export function initEditor3D() {
   const container = document.getElementById("editor3d");
   container.innerHTML = `
-    <h2>🟊 Редактор 3D-сцены</h2>
+    <h2>🧊 3D Редактор</h2>
+    <div id="threeContainer" style="width:100%; height:512px;"></div>
     <div class="toolbox">
       <button id="addCube">➕ Куб</button>
-      <button id="exportPis">💾 Сохранить .pis</button>
-      <button id="exportGfm">💾 Экспорт .gfm</button>
-      <input type="file" id="importPis" accept=".pis" />
-      <input type="file" id="importGfm" accept=".gfm" />
+      <button id="importScene">📂 Импорт .pis / .gfm</button>
+      <button id="exportPIS">💾 Экспорт .pis</button>
+      <button id="exportGFM">📦 Экспорт .gfm</button>
     </div>
-    <canvas id="threeCanvas" style="width:100%;height:400px;"></canvas>
   `;
 
-  const canvas = document.getElementById("threeCanvas");
-
-  // three.js setup
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / 400, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ canvas });
-  renderer.setSize(canvas.clientWidth, 400);
-  camera.position.z = 5;
+  scene.background = new THREE.Color(0x111111);
 
-  const light = new THREE.AmbientLight(0xffffff, 1);
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  camera.aspect = 512 / 512;
+  camera.updateProjectionMatrix();
+  camera.position.set(5, 5, 5);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer();
+  renderer.setSize(512, 512);
+  document.getElementById("threeContainer").appendChild(renderer.domElement);
+
+  const light = new THREE.PointLight(0xffffff, 1);
+  light.position.set(5, 10, 5);
   scene.add(light);
 
-  const objects = [];
+  const gridHelper = new THREE.GridHelper(10, 10);
+  scene.add(gridHelper);
 
-  document.getElementById("addCube").onclick = () => {
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
-    const cube = new THREE.Mesh(geometry, material);
-    cube.position.set(Math.random() * 4 - 2, 0, Math.random() * 4 - 2);
+  const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x3399ff });
+
+  const blocks = [];
+
+  function addBlock(x = 0, y = 0.5, z = 0) {
+    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.position.set(x, y, z);
     scene.add(cube);
-    objects.push({ type: "cube", position: cube.position.toArray(), color: material.color.getHex() });
+    blocks.push({ x, y, z });
+  }
+
+  document.getElementById("addCube").onclick = () => addBlock();
+
+  document.getElementById("exportPIS").onclick = () => {
+    const data = { project: "3DScene", blocks };
+    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "project.pis";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  document.getElementById("exportGFM").onclick = () => {
+    const blob = new Blob([JSON.stringify(blocks)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "model.gfm";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // 📂 Импорт файлов .pis и .gfm
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.accept = ".pis,.gfm";
+  fileInput.style.display = "none";
+  document.body.appendChild(fileInput);
+
+  document.getElementById("importScene").onclick = () => fileInput.click();
+
+  fileInput.onchange = () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        const imported = data.blocks || data;
+        imported.forEach(obj => addBlock(obj.x, obj.y, obj.z));
+        alert("Импорт завершён!");
+      } catch (e) {
+        alert("Ошибка импорта: " + e.message);
+      }
+    };
+    reader.readAsText(file);
   };
 
   function animate() {
@@ -45,76 +101,4 @@ export function initEditor3D() {
   }
 
   animate();
-
-  document.getElementById("exportPis").onclick = () => {
-    const blob = new Blob([JSON.stringify(objects, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "scene.pis";
-    a.click();
-    localStorage.setItem("ShitOS_scene.pis", JSON.stringify(objects));
-  };
-
-  document.getElementById("exportGfm").onclick = () => {
-    const gfmData = { version: 1, models: objects };
-    const blob = new Blob([JSON.stringify(gfmData)], { type: "application/gfm" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "scene.gfm";
-    a.click();
-    localStorage.setItem("ShitOS_scene.gfm", JSON.stringify(gfmData));
-  };
-
-  document.getElementById("importPis").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const data = JSON.parse(reader.result);
-        data.forEach(obj => {
-          if (obj.type === "cube") {
-            const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshStandardMaterial({ color: obj.color });
-            const cube = new THREE.Mesh(geometry, material);
-            cube.position.set(...obj.position);
-            scene.add(cube);
-          }
-        });
-        objects.splice(0, objects.length, ...data);
-        localStorage.setItem("ShitOS_scene.pis", JSON.stringify(data));
-      } catch (err) {
-        showError("Ошибка импорта .pis: " + err.message);
-      }
-    };
-    reader.readAsText(file);
-  });
-
-  document.getElementById("importGfm").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const data = JSON.parse(reader.result);
-        if (!data.models) throw new Error("Неверный формат .gfm");
-        data.models.forEach(obj => {
-          if (obj.type === "cube") {
-            const geometry = new THREE.BoxGeometry();
-            const material = new THREE.MeshStandardMaterial({ color: obj.color });
-            const cube = new THREE.Mesh(geometry, material);
-            cube.position.set(...obj.position);
-            scene.add(cube);
-          }
-        });
-        objects.splice(0, objects.length, ...data.models);
-        localStorage.setItem("ShitOS_scene.gfm", JSON.stringify(data));
-      } catch (err) {
-        showError("Ошибка импорта .gfm: " + err.message);
-      }
-    };
-    reader.readAsText(file);
-  });
 }

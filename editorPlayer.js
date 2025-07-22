@@ -1,56 +1,55 @@
-// js/editorPlayer.js
+// editorPlayer.js — расширенный редактор персонажа
 
 export function initCharacterEditor() {
   const container = document.getElementById("character");
   container.innerHTML = `
-    <h2>🧍 Редактор Персонажа</h2>
-    <div class="toolbox">
-      <label>Имя: <input type="text" id="playerName" value="Данил" /></label>
-      <label>Скорость: <input type="number" id="playerSpeed" value="2" min="1" max="10" /></label>
-      <label>Старт X: <input type="number" id="playerStartX" value="0" /></label>
-      <label>Старт Y: <input type="number" id="playerStartY" value="0" /></label>
-      <label>Спрайт: <input type="file" id="playerSprite" accept="image/png" /></label>
-      <button id="savePlayer">💾 Сохранить .gis</button>
+    <h2>🧍‍♂️ Редактор персонажа</h2>
+    <div class="char-settings">
+      <label>Имя: <input id="charName" type="text" placeholder="Герой" /></label>
+      <label>Скорость: <input id="charSpeed" type="number" value="2" min="1" /></label>
+      <label>Позиция X: <input id="charX" type="number" value="0" /></label>
+      <label>Позиция Y: <input id="charY" type="number" value="0" /></label>
+      <label>Здоровье: <input id="charHP" type="number" value="100" min="0" /></label>
+      <label>Атака: <input id="charAtk" type="number" value="10" min="0" /></label>
+      <label>Размер: <input id="charScale" type="number" value="1" step="0.1" min="0.1" /></label>
+      <label>Спрайт PNG: <input id="charSprite" type="file" accept="image/png" /></label>
+      <div id="charPreview"></div>
+      <button id="saveChar">💾 Сохранить персонажа</button>
     </div>
-    <div id="playerPreview"></div>
+    <pre id="charOutput" class="char-json"></pre>
   `;
 
-  const preview = document.getElementById("playerPreview");
+  const spriteInput = document.getElementById("charSprite");
+  const preview = document.getElementById("charPreview");
+  const output = document.getElementById("charOutput");
+  let spriteDataUrl = "";
 
-  let spriteDataURL = null;
-
-  document.getElementById("playerSprite").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      spriteDataURL = reader.result;
-
-      const img = document.createElement("img");
-      img.src = spriteDataURL;
-      img.style.maxWidth = "64px";
-      img.style.imageRendering = "pixelated";
-
-      preview.innerHTML = "<p>Превью:</p>";
-      preview.appendChild(img);
-    };
-    reader.readAsDataURL(file);
+  spriteInput.addEventListener("change", () => {
+    const file = spriteInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        spriteDataUrl = reader.result;
+        preview.innerHTML = `<img src="${spriteDataUrl}" width="64" height="64" />`;
+      };
+      reader.readAsDataURL(file);
+    }
   });
 
-  document.getElementById("savePlayer").addEventListener("click", () => {
-    const data = {
-      name: document.getElementById("playerName").value || "Игрок",
-      speed: parseInt(document.getElementById("playerSpeed").value) || 2,
-      startX: parseInt(document.getElementById("playerStartX").value) || 0,
-      startY: parseInt(document.getElementById("playerStartY").value) || 0,
-      sprite: spriteDataURL || null
+  document.getElementById("saveChar").onclick = () => {
+    const character = {
+      name: document.getElementById("charName").value,
+      speed: parseFloat(document.getElementById("charSpeed").value),
+      x: parseInt(document.getElementById("charX").value),
+      y: parseInt(document.getElementById("charY").value),
+      hp: parseInt(document.getElementById("charHP").value),
+      attack: parseInt(document.getElementById("charAtk").value),
+      scale: parseFloat(document.getElementById("charScale").value),
+      sprite: spriteDataUrl
     };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "player.gis";
-    a.click();
-  });
+    localStorage.setItem("ShitOS_character", JSON.stringify(character));
+    output.textContent = JSON.stringify(character, null, 2);
+    alert("Персонаж сохранён в localStorage!");
+  };
 }

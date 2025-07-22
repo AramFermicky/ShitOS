@@ -1,142 +1,137 @@
-/* Основной стиль */
+/* style.css — стиль интерфейса ShitOS */
+
 body {
+  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  font-family: "Segoe UI", sans-serif;
-  background-color: #111;
-  color: #f0f0f0;
+  background: linear-gradient(145deg, #111, #1a1a1a);
+  color: #eee;
 }
 
-/* Хедер */
 header {
   background-color: #222;
-  padding: 10px 20px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  box-shadow: 0 0 8px #000;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 20px;
+  border-bottom: 2px solid #333;
 }
 
 nav {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .menu-button {
-  background: #444;
-  border: none;
+  background: #333;
   color: #fff;
-  padding: 8px 12px;
-  cursor: pointer;
+  border: 1px solid #555;
+  padding: 6px 12px;
   border-radius: 6px;
-  transition: background 0.2s;
+  cursor: pointer;
 }
 
 .menu-button:hover {
-  background: #666;
-}
-
-/* Предменю выбора устройства */
-#deviceSelect {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #111, #333);
-  gap: 20px;
-}
-
-#deviceSelect h2 {
-  font-size: 24px;
-}
-
-#deviceSelect button {
-  font-size: 20px;
-  padding: 10px 24px;
   background: #444;
-  border: none;
-  color: #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s;
 }
 
-#deviceSelect button:hover {
-  background: #666;
-}
-
-/* Основные страницы */
 main {
-  padding: 20px;
-}
-
-.page {
-  display: none;
+  padding: 10px;
 }
 
 .toolbox {
-  background: #222;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  background: #1b1b1b;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #333;
+  border-radius: 6px;
   display: flex;
-  flex-direction: column;
   gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.toolbox input[type="text"],
-.toolbox input[type="number"],
-.toolbox input[type="file"],
-.toolbox select {
-  padding: 6px;
-  background: #333;
-  border: 1px solid #555;
-  color: #fff;
-  border-radius: 6px;
+canvas {
+  margin-top: 10px;
+  image-rendering: pixelated;
 }
 
-.toolbox button {
-  background: #555;
-  color: #fff;
+/* Device selector */
+#deviceSelect {
+  padding: 30px;
+  text-align: center;
+}
+
+#deviceSelect button {
+  font-size: 18px;
+  margin: 10px;
+  padding: 14px 28px;
+  border-radius: 10px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+  background: #333;
+  color: white;
   cursor: pointer;
 }
 
-.toolbox button:hover {
-  background: #777;
+#deviceSelect button:hover {
+  background: #444;
 }
 
 /* Ошибки */
-#shitErrorBox {
+#errorMessage {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ff3333;
+  bottom: 10px;
+  left: 10px;
+  max-width: 90%;
+  padding: 10px 14px;
+  background-color: #ff3333;
   color: #fff;
-  padding: 12px 20px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  font-family: monospace;
   z-index: 9999;
   display: none;
 }
 
-/* Мобильное адаптирование */
-body.device-mobile nav {
+/* Мобильная адаптация */
+body.device-mobile .toolbox {
   flex-direction: column;
   align-items: stretch;
 }
 
-body.device-mobile .menu-button {
-  width: 100%;
+/* Кнопки */
+button {
+  transition: all 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Превью PNG */
+#charPreview img {
+  margin-top: 10px;
+  max-width: 64px;
+  border: 2px solid #444;
+  border-radius: 6px;
+}
+
+/* JSON предпросмотр */
+.char-json {
+  white-space: pre-wrap;
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #00dd00;
+  margin-top: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* THREE.js */
+#threeContainer canvas {
+  border-radius: 8px;
+  border: 1px solid #555;
+  background-color: #000;
 }

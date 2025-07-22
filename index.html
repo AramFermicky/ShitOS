@@ -3,54 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>💩 ShitOS</title>
+  <title>ShitOS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <!-- Предменю выбора устройства -->
-  <div id="deviceSelect" class="device-select">
-    <h2>Выберите устройство:</h2>
-    <button id="selectDesktop">💻 ПК</button>
+  <div id="deviceSelect">
+    <h1>Выберите устройство</h1>
+    <button id="selectPC">💻 ПК</button>
     <button id="selectMobile">📱 Мобильное</button>
   </div>
 
   <!-- Основной интерфейс -->
-  <div id="mainInterface" style="display:none;">
+  <main style="display: none;">
     <header>
-      <h1>💩 ShitOS</h1>
+      <strong>ShitOS — Творческая система</strong>
       <nav>
-        <button class="menu-button" data-target="creator">🎮 Создатель Игры</button>
-        <button class="menu-button" data-target="editor">🧱 Редактор 2D</button>
-        <button class="menu-button" data-target="editor3d">🧊 Редактор 3D</button>
-        <button class="menu-button" data-target="character">🧍 Персонаж</button>
-        <button class="menu-button" data-target="exporter">📦 Экспорт</button>
-        <button class="menu-button" data-target="game">▶️ Играть</button>
+        <button class="menu-button" data-tab="editor">🧱 Уровень</button>
+        <button class="menu-button" data-tab="editor3d">🔲 3D</button>
+        <button class="menu-button" data-tab="character">🧍 Персонаж</button>
+        <button class="menu-button" data-tab="exporter">📦 Экспорт</button>
+        <button class="menu-button" data-tab="game">▶️ Играть</button>
+        <button class="menu-button" data-tab="projects">📁 Проекты</button>
       </nav>
     </header>
 
-    <main>
-      <!-- Менеджер проектов -->
-      <section id="creator" class="page" style="display: none;"></section>
+    <!-- Вкладки -->
+    <section id="editor" style="display: none;"></section>
+    <section id="editor3d" style="display: none;"></section>
+    <section id="character" style="display: none;"></section>
+    <section id="exporter" style="display: none;"></section>
+    <section id="game" style="display: none;"></section>
+    <section id="projects" style="display: none;"></section>
+  </main>
 
-      <!-- Редактор 2D -->
-      <section id="editor" class="page" data-initialized="false" style="display: none;"></section>
-
-      <!-- Редактор 3D -->
-      <section id="editor3d" class="page" data-initialized="false" style="display: none;"></section>
-
-      <!-- Редактор персонажа -->
-      <section id="character" class="page" data-initialized="false" style="display: none;"></section>
-
-      <!-- Экспорт проекта -->
-      <section id="exporter" class="page" data-initialized="false" style="display: none;"></section>
-
-      <!-- Игровой режим -->
-      <section id="game" class="page" data-initialized="false" style="display: none;"></section>
-    </main>
-  </div>
-
-  <!-- Элемент для вывода ошибок -->
-  <div id="shitErrorBox" style="display:none;"></div>
+  <!-- Сообщения об ошибках -->
+  <div id="errorMessage"></div>
 
   <!-- Скрипты -->
   <script type="module" src="main.js"></script>

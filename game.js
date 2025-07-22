@@ -1,81 +1,73 @@
-// js/game.js
+// game.js — запуск игры из localStorage (после загрузки .gap или редакторов)
 
 import { showError } from "./errorMessage.js";
 
 export function initGame() {
   const container = document.getElementById("game");
   container.innerHTML = `
-    <h2>▶️ Запуск игры</h2>
-    <canvas id="gameCanvas" width="512" height="512" style="background:#000;border:1px solid #555;"></canvas>
+    <h2>🎮 Запуск Игры</h2>
+    <canvas id="gameCanvas" width="512" height="512" style="border:1px solid #999;"></canvas>
   `;
 
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
-  const tileSize = 32;
 
-  let mapData = null;
-  let player = { x: 0, y: 0 };
-  let tileset = null;
+  const tileSize = 32;
+  let map, character;
 
   try {
-    const saved = JSON.parse(localStorage.getItem("ShitOS_map"));
-    mapData = saved.grid;
-    tileset = new Image();
-    tileset.src = saved.tileset;
-    tileset.onload = render;
-  } catch (err) {
-    showError("Ошибка загрузки карты: " + err.message);
+    map = JSON.parse(localStorage.getItem("ShitOS_map"));
+    character = JSON.parse(localStorage.getItem("ShitOS_character"));
+    if (!map || !map.grid || !character) throw new Error("Отсутствует карта или персонаж");
+  } catch (e) {
+    showError("Невозможно запустить игру: " + e.message);
     return;
   }
 
-  try {
-    const savedPlayer = JSON.parse(localStorage.getItem("ShitOS_player"));
-    player = savedPlayer || player;
-  } catch (err) {
-    showError("Ошибка загрузки персонажа: " + err.message);
-  }
+  let player = {
+    x: character.startX || 1,
+    y: character.startY || 1,
+    color: character.color || "#0f0"
+  };
 
-  function render() {
+  function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const rows = map.grid.length;
+    const cols = map.grid[0].length;
 
-    for (let y = 0; y < mapData.length; y++) {
-      for (let x = 0; x < mapData[0].length; x++) {
-        const tile = mapData[y][x];
-        if (tileset) {
-          const tilesPerRow = Math.floor(tileset.width / tileSize);
-          const sx = (tile % tilesPerRow) * tileSize;
-          const sy = Math.floor(tile / tilesPerRow) * tileSize;
-          ctx.drawImage(tileset, sx, sy, tileSize, tileSize, x * tileSize, y * tileSize, tileSize, tileSize);
-        } else {
-          ctx.fillStyle = tile === 0 ? "#111" : "#666";
-          ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-        }
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const val = map.grid[y][x];
+        ctx.fillStyle = val === 0 ? "#111" : `hsl(${val * 40 % 360}, 70%, 50%)`;
+        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        ctx.strokeStyle = "#333";
+        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
       }
     }
 
-    ctx.fillStyle = "#00ffff";
+    // Персонаж
+    ctx.fillStyle = player.color;
     ctx.fillRect(player.x * tileSize, player.y * tileSize, tileSize, tileSize);
   }
 
-  function move(dx, dy) {
-    const newX = player.x + dx;
-    const newY = player.y + dy;
-    if (
-      newX >= 0 && newY >= 0 &&
-      newX < mapData[0].length &&
-      newY < mapData.length &&
-      mapData[newY][newX] === 0
-    ) {
-      player.x = newX;
-      player.y = newY;
+  function movePlayer(dx, dy) {
+    const nx = player.x + dx;
+    const ny = player.y + dy;
+    if (ny >= 0 && ny < map.grid.length && nx >= 0 && nx < map.grid[0].length) {
+      player.x = nx;
+      player.y = ny;
+      draw();
     }
-    render();
   }
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowUp") move(0, -1);
-    else if (e.key === "ArrowDown") move(0, 1);
-    else if (e.key === "ArrowLeft") move(-1, 0);
-    else if (e.key === "ArrowRight") move(1, 0);
+  window.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      case "ArrowUp": movePlayer(0, -1); break;
+      case "ArrowDown": movePlayer(0, 1); break;
+      case "ArrowLeft": movePlayer(-1, 0); break;
+      case "ArrowRight": movePlayer(1, 0); break;
+    }
   });
+
+  draw();
 }
