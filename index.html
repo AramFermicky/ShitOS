@@ -20,16 +20,25 @@
     <header>
       <strong>ShitOS — Творческая система</strong>
       <nav>
+        <button class="menu-button" data-tab="play">▶️ Играть</button>
+        <button class="menu-button" data-tab="gfmimport">📥 Импорт GFM</button>
+        <button class="menu-button" data-tab="blockbench">🧱 Blockbench 3D</button>
+        <button class="menu-button" data-tab="puller">🔗 Переходы</button>
         <button class="menu-button" data-tab="editor">🧱 Уровень</button>
         <button class="menu-button" data-tab="editor3d">🔲 3D</button>
         <button class="menu-button" data-tab="character">🧍 Персонаж</button>
         <button class="menu-button" data-tab="exporter">📦 Экспорт</button>
         <button class="menu-button" data-tab="game">▶️ Играть</button>
         <button class="menu-button" data-tab="projects">📁 Проекты</button>
+<button id="menuSettings">⚙️ Настроить меню</button>
       </nav>
     </header>
 
-    <!-- Вкладки -->
+    <!-- Секции -->
+    <section id="play" style="display: none;"></section>
+    <section id="gfmimport" style="display: none;"></section>
+    <section id="blockbench" style="display: none;"></section>
+    <section id="puller" style="display: none;"></section>
     <section id="editor" style="display: none;"></section>
     <section id="editor3d" style="display: none;"></section>
     <section id="character" style="display: none;"></section>
@@ -37,6 +46,16 @@
     <section id="game" style="display: none;"></section>
     <section id="projects" style="display: none;"></section>
   </main>
+
+<!-- Модальное окно настройки вкладок -->
+<div id="menuModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3>Настройка меню</h3>
+    <div id="menuOptions"></div>
+    <button id="saveMenuConfig">💾 Сохранить</button>
+    <button id="closeMenuModal">✖️ Закрыть</button>
+  </div>
+</div>
 
   <!-- Сообщения об ошибках -->
   <div id="errorMessage"></div>

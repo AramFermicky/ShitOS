@@ -15,6 +15,7 @@ export function initExport() {
       <button id="exportGFM">🧱 .gfm (3D-модели)</button>
       <button id="exportGAP">▶️ .gap (игровой билд)</button>
       <button id="exportXOD">📁 .xod (архив проекта)</button>
+      <button id="exportLinks">📡 .links.json (связи)</button>
     </div>
 
     <hr />
@@ -23,6 +24,7 @@ export function initExport() {
       <input type="file" id="importGIS" accept=".gis" />
       <input type="file" id="importGAP" accept=".gap" />
       <input type="file" id="importXOD" accept=".xod" />
+      <input type="file" id="importLinks" accept=".json" />
     </div>
   `;
 
@@ -103,6 +105,7 @@ export function initExport() {
     add("character.gpd", "ShitOS_character");
     add("scene.pis", "ShitOS_pis");
     add("model.gfm", "ShitOS_gfm");
+    add("links.json", "ShitOS_links");
 
     const meta = {
       projectName: "ShitOS Game Project",
@@ -120,6 +123,12 @@ export function initExport() {
     URL.revokeObjectURL(url);
   };
 
+  document.getElementById("exportLinks").onclick = () => {
+    const links = localStorage.getItem("ShitOS_links");
+    if (!links) return showError("Нет связей сцен");
+    exportFile(JSON.parse(links), "links.json");
+  };
+
   document.getElementById("importGIS").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) loadGisFile(file, () => alert("Карта импортирована"));
@@ -133,5 +142,20 @@ export function initExport() {
   document.getElementById("importXOD").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file) loadXodFile(file, () => alert("Проект загружен"));
+  });
+
+  document.getElementById("importLinks").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const links = JSON.parse(reader.result);
+        localStorage.setItem("ShitOS_links", JSON.stringify(links));
+        alert("Связи сцен импортированы!");
+      } catch (err) {
+        showError("Ошибка импорта .links: " + err.message);
+      }
+    };
+    reader.readAsText(file);
   });
 }

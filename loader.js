@@ -31,7 +31,8 @@ export function loadXodFile(file, callback) {
         "map.gis": "ShitOS_map",
         "character.gpd": "ShitOS_character",
         "scene.pis": "ShitOS_pis",
-        "model.gfm": "ShitOS_gfm"
+        "model.gfm": "ShitOS_gfm",
+        "links.json": "ShitOS_links"
       };
 
       for (const entry in keys) {

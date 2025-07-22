@@ -2,6 +2,11 @@
 
 import { showError } from "./errorMessage.js";
 
+export function initGamePlayer() {
+  document.getElementById("play").innerHTML = `<canvas id="gameCanvas" width="512" height="512" style="border:1px solid #444"></canvas>`;
+  initGame(); // ← твоя основная функция запуска (внутри game.js)
+}
+
 export function initGame() {
   const container = document.getElementById("game");
   container.innerHTML = `
@@ -18,6 +23,9 @@ export function initGame() {
   try {
     map = JSON.parse(localStorage.getItem("ShitOS_map"));
     character = JSON.parse(localStorage.getItem("ShitOS_character"));
+const objectMap = map.objectMap || [];
+const allProjects = JSON.parse(localStorage.getItem("ShitOS_projects") || "[]");
+const links = JSON.parse(localStorage.getItem("ShitOS_links") || "[]");
     if (!map || !map.grid || !character) throw new Error("Отсутствует карта или персонаж");
   } catch (e) {
     showError("Невозможно запустить игру: " + e.message);
@@ -28,6 +36,9 @@ export function initGame() {
     x: character.startX || 1,
     y: character.startY || 1,
     color: character.color || "#0f0"
+let inventory = {
+  keys: 0
+};
   };
 
   function draw() {
@@ -41,7 +52,31 @@ export function initGame() {
         ctx.fillStyle = val === 0 ? "#111" : `hsl(${val * 40 % 360}, 70%, 50%)`;
         ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
         ctx.strokeStyle = "#333";
-        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize); 
+        const obj = objectMap[y][x];
+if (obj?.type === "portal") {
+        ctx.fillStyle = "#00f5";
+        ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+}
+const obj = objectMap[y][x];
+if (obj?.type === "portal") {
+  ctx.fillStyle = "#00f5";
+  ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+}
+if (obj?.type === "door") {
+  ctx.fillStyle = "#a55";
+  ctx.fillRect(x * tileSize + 8, y * tileSize + 8, tileSize - 16, tileSize - 16);
+}
+if (obj?.type === "key") {
+  ctx.fillStyle = "#ff0";
+  ctx.beginPath();
+  ctx.arc(x * tileSize + 16, y * tileSize + 16, 6, 0, Math.PI * 2);
+  ctx.fill();
+}
+if (obj?.type === "enemy") {
+  ctx.fillStyle = "#f00";
+  ctx.fillRect(x * tileSize + 8, y * tileSize + 8, tileSize - 16, tileSize - 16);
+}
       }
     }
 
@@ -51,15 +86,57 @@ export function initGame() {
   }
 
   function movePlayer(dx, dy) {
-    const nx = player.x + dx;
-    const ny = player.y + dy;
-    if (ny >= 0 && ny < map.grid.length && nx >= 0 && nx < map.grid[0].length) {
-      player.x = nx;
-      player.y = ny;
-      draw();
-    }
-  }
+  const nx = player.x + dx;
+  const ny = player.y + dy;
 
+  if (ny >= 0 && ny < map.grid.length && nx >= 0 && nx < map.grid[0].length) {
+    player.x = nx;
+    player.y = ny;
+const obj = objectMap?.[ny]?.[nx];
+if (obj) {
+  switch (obj.type) {
+    case "key":
+      inventory.keys++;
+      objectMap[ny][nx] = null;
+      alert("🔑 Поднят ключ! Теперь у тебя ключей: " + inventory.keys);
+      break;
+
+    case "door":
+      if (inventory.keys > 0) {
+        inventory.keys--;
+        objectMap[ny][nx] = null;
+        alert("🚪 Дверь открыта! Осталось ключей: " + inventory.keys);
+      } else {
+        alert("🚫 Дверь закрыта. Нужен ключ.");
+        return; // не двигаем игрока
+      }
+      break;
+
+    case "enemy":
+      alert("👾 Враг! Пока ты не умеешь сражаться...");
+      return; // враг блокирует путь
+  }
+}
+
+    // Проверка на портал
+    const obj = objectMap?.[ny]?.[nx];
+    if (obj?.type === "portal") {
+      const fromIdx = allProjects.findIndex(p => JSON.stringify(p.data?.grid) === JSON.stringify(map.grid));
+      const link = links.find(l => l.from === fromIdx && l.x === nx && l.y === ny);
+      if (link) {
+        const targetScene = allProjects[link.to];
+        if (targetScene) {
+          localStorage.setItem("ShitOS_map", JSON.stringify(targetScene.data));
+          alert(`Телепорт в сцену "${targetScene.name}"`);
+          initGame(); // перезапуск сцены
+          return;
+        }
+      }
+    }
+
+    draw();
+  }
+}
   window.addEventListener("keydown", (e) => {
     switch (e.key) {
       case "ArrowUp": movePlayer(0, -1); break;
